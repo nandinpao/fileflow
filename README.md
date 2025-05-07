@@ -27,6 +27,7 @@ graph TD
     style C fill:#ccf,stroke:#336,stroke-width:2px
     style D fill:#cfc,stroke:#393,stroke-width:2px
     style A fill:#d9f,stroke:#63f,stroke-width:2px
+```
 
 **Component Description**
 
