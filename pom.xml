@@ -79,6 +79,12 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.agitg</groupId>
+            <artifactId>redisson-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>

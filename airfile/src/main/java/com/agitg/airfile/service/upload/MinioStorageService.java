@@ -1,4 +1,4 @@
-package com.agitg.airfile.service;
+package com.agitg.airfile.service.upload;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.agitg.airfile.config.StorageProperties;
 import com.agitg.airfile.controller.ChunkUpload;
+import com.agitg.airfile.service.StorageService;
+import com.agitg.airfile.service.UploadProgressService;
+import com.agitg.airfile.stream.ProgressInputStream;
+import com.agitg.airfile.util.InputStreamUtils;
 
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
@@ -20,6 +24,9 @@ public class MinioStorageService implements StorageService {
 
     @Autowired
     private StorageProperties properties;
+
+    @Autowired
+    private UploadProgressService uploadProgressService;
 
     @PostConstruct
     public void init() throws Exception {
@@ -39,14 +46,22 @@ public class MinioStorageService implements StorageService {
     @Override
     public String save(String entryId, String fileName, InputStream inputStream, ChunkUpload chunk) throws IOException {
         try {
+
+            long total = InputStreamUtils.getInstance().getInputStreamSize(inputStream);
+
+            InputStream progressStream = new ProgressInputStream(
+                    inputStream, total, entryId, uploadProgressService);
+
             MinioClient client = getClient();
             client.putObject(PutObjectArgs.builder()
                     .bucket(properties.getStorage().getMinio().getBucket())
                     .object(fileName)
-                    .stream(inputStream, -1, 10485760)
+                    .stream(progressStream, total, -1)
                     .contentType("application/octet-stream")
                     .build());
+
             return fileName;
+
         } catch (Exception e) {
             throw new IOException(e);
         }
