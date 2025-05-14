@@ -25,11 +25,13 @@ public class UploadResumeController {
     @PostMapping(value = "/resume")
     public ResponseEntity<?> uploadWithOffset(
             HttpServletRequest request,
+            @RequestParam("entryId") String entryId,
             @RequestParam("fileId") String fileId,
             @RequestHeader("Content-Range") String contentRange,
             @RequestHeader("Content-Length") String contentLength) throws IOException {
 
-        return ResponseEntity.ok(uploadService.upload(fileId, contentRange, contentLength, request.getInputStream()));
+        return ResponseEntity
+                .ok(uploadService.upload(entryId, fileId, contentRange, contentLength, request.getInputStream()));
     }
 
     @GetMapping(value = "/resume/status")

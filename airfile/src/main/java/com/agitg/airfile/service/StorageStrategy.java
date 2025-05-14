@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.agitg.airfile.controller.ChunkUpload;
+import com.agitg.airfile.service.upload.StorageService;
 
 @Service
 public class StorageStrategy {

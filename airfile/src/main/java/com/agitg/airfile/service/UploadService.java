@@ -30,14 +30,15 @@ public class UploadService {
     @Autowired
     private UploadProgressService uploadProgressService;
 
-    public UploadBean upload(String fileName, String contentRange, String contentLengthStr,
+    public UploadBean upload(String entryId, String fileName, String contentRange, String contentLengthStr,
             InputStream in)
             throws IOException {
 
         long contentLength = Long.parseLong(contentLengthStr);
         ChunkUpload chunk = parseChunk(contentRange, contentLengthStr);
 
-        String entryId = UUID.randomUUID().toString(); // need to implement
+        // String entryId = UUID.randomUUID().toString(); // to implement from a
+        // authorized user id
 
         Map<String, String> resultPaths = strategy.saveToAll(entryId, fileName, in, chunk);
 
