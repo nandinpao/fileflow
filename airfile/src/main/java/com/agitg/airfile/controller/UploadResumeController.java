@@ -34,12 +34,7 @@ public class UploadResumeController {
 
     @GetMapping(value = "/resume/status")
     public ResponseEntity<?> getUploadedSize(@RequestParam("fileId") String fileId) {
-        return ResponseEntity.ok(uploadService.getCurrentStatus(fileId));
-    }
-
-    @GetMapping(value = "/status")
-    public ResponseEntity<?> getUploadStatus(@RequestParam String fileId) throws IOException {
-        return ResponseEntity.ok(uploadService.getFileStatus(fileId));
+        return ResponseEntity.ok(uploadService.getUploadProgress(fileId));
     }
 
 }

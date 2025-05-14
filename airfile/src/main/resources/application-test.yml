@@ -18,6 +18,8 @@ springdoc:
       activated: true
 
 spring:
+  config:
+    import: classpath:redisson.yml,
   batch:
     jdbc:
       initialize-schema: always
@@ -58,4 +60,4 @@ airfile:
       
     localFile:
       enable: true
-      path: "/Users/nandin.pao/Documents/agitg/source/aswished/upload/resume/"
+      path: "/Users/nandin.pao/Documents/agitg/source/fileflow/airfile/upload"

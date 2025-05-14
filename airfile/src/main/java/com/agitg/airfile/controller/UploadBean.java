@@ -11,6 +11,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class UploadBean {
 
-    private Boolean complete;
+    private String fileId;
+    private long total;;
     private Long uploaded;
+    private Boolean complete;
 }

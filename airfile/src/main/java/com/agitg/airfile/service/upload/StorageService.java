@@ -1,4 +1,4 @@
-package com.agitg.airfile.service;
+package com.agitg.airfile.service.upload;
 
 import java.io.IOException;
 import java.io.InputStream;

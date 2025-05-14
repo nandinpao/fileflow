@@ -1,12 +1,9 @@
 package com.agitg.airfile.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.agitg.airfile.batch.FileUploadEvent;
 import com.agitg.airfile.batch.FileUploadRepository;
-import com.agitg.airfile.config.StorageProperties;
 import com.agitg.airfile.controller.ChunkUpload;
 import com.agitg.airfile.controller.UploadBean;
 
@@ -26,13 +22,13 @@ import lombok.extern.slf4j.Slf4j;
 public class UploadService {
 
     @Autowired
-    private StorageProperties properties;
-
-    @Autowired
     private FileUploadRepository fileUploadRepository;
 
     @Autowired
     private StorageStrategy strategy;
+
+    @Autowired
+    private UploadProgressService uploadProgressService;
 
     public UploadBean upload(String fileName, String contentRange, String contentLengthStr,
             InputStream in)
@@ -41,7 +37,7 @@ public class UploadService {
         long contentLength = Long.parseLong(contentLengthStr);
         ChunkUpload chunk = parseChunk(contentRange, contentLengthStr);
 
-        String entryId = ""; // need to implement
+        String entryId = UUID.randomUUID().toString(); // need to implement
 
         Map<String, String> resultPaths = strategy.saveToAll(entryId, fileName, in, chunk);
 
@@ -75,30 +71,10 @@ public class UploadService {
                 Long.parseLong(matcher.group(3)));
     }
 
-    public long getInputStreamSize(InputStream inputStream) throws IOException {
-        byte[] buffer = new byte[4096];
-        int bytesRead;
-        long totalBytes = 0;
-        while ((bytesRead = inputStream.read(buffer)) != -1) {
-            totalBytes += bytesRead;
-        }
-        return totalBytes;
-    }
+    public UploadBean getUploadProgress(String fileId) {
 
-    public UploadBean getCurrentStatus(String fileId) {
-
-        File file = new File(properties.getStorage().getLocalFile().getPath() + fileId);
-        long size = file.exists() ? file.length() : 0;
-
-        return new UploadBean().setUploaded(size);
-    }
-
-    public UploadBean getFileStatus(String fileId) throws IOException {
-
-        Path filePath = Paths.get(properties.getStorage().getLocalFile().getPath()).resolve(fileId);
-        long uploadedSize = Files.exists(filePath) ? Files.size(filePath) : 0;
-
-        return new UploadBean().setUploaded(uploadedSize);
+        return uploadProgressService.getUploadProgress(fileId);
 
     }
+
 }
