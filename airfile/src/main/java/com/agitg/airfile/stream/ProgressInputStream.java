@@ -12,12 +12,14 @@ public class ProgressInputStream extends FilterInputStream {
     private long uploadedBytes = 0;
     private final String fileId;
     private final UploadProgressService progressService;
+    private String type;
 
     public ProgressInputStream(InputStream in, long totalBytes,
-            String fileId, UploadProgressService progressService) {
+            String fileId, String type, UploadProgressService progressService) {
         super(in);
         this.totalBytes = totalBytes;
         this.fileId = fileId;
+        this.type = type;
         this.progressService = progressService;
     }
 
@@ -26,7 +28,7 @@ public class ProgressInputStream extends FilterInputStream {
         int count = super.read(b, off, len);
         if (count > 0) {
             uploadedBytes += count;
-            progressService.saveProgressToRedis(fileId, uploadedBytes, totalBytes);
+            progressService.saveProgressToRedis(type, fileId, uploadedBytes, totalBytes);
         }
         return count;
     }

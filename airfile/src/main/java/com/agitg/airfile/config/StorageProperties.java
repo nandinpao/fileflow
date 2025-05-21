@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StorageProperties {
-    
+
     private Schedule schedule;
     private Storage storage;
 
@@ -35,6 +35,7 @@ public class StorageProperties {
         @Data
         public static class Minio {
             private boolean enable;
+            private String domain;
             private String url;
             private String accessKey;
             private String secretKey;
@@ -45,6 +46,7 @@ public class StorageProperties {
         public static class LocalFile {
             private boolean enable;
             private String path;
+            private String domain;
         }
     }
 }

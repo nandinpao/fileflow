@@ -11,7 +11,8 @@ public interface StorageService {
 
     String getStorageType();
 
-    String save(String entryId, String fileName, InputStream inputStream, ChunkUpload chunk) throws IOException;
+    FileStorageInfo save(String entryId, String fileName, InputStream inputStream, ChunkUpload chunk)
+            throws IOException, Exception;
 
     long size(String path) throws IOException;
 

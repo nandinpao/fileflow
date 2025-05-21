@@ -31,17 +31,17 @@ public class LocalStorageService implements StorageService {
     private UploadProgressService uploadProgressService;
 
     @Override
-    public String save(String entryId, String fileName, InputStream inputStream, ChunkUpload chunk) throws IOException {
+    public FileStorageInfo save(String entryId, String fileName, InputStream inputStream, ChunkUpload chunk)
+            throws IOException {
 
         File dir = new File(properties.getStorage().getLocalFile().getPath());
-        if (!dir.exists())
+        if (!dir.exists()) {
             dir.mkdirs();
-
-        // File target = new File(dir, fileId);
+        }
 
         long total = InputStreamUtils.getInstance().getInputStreamSize(inputStream);
         InputStream progressStream = new ProgressInputStream(
-                inputStream, total, entryId, uploadProgressService);
+                inputStream, total, entryId, this.getStorageType(), uploadProgressService);
 
         Path path = FilePathGenerator.getInstance().generateLocalPath(properties.getStorage().getLocalFile().getPath(),
                 entryId,
@@ -69,7 +69,11 @@ public class LocalStorageService implements StorageService {
                 }
             }
         }
-        return target.getAbsolutePath();
+
+        return new FileStorageInfo(dir.getAbsolutePath(),
+                target.getAbsolutePath().replace(properties.getStorage().getLocalFile().getPath(), ""),
+                properties.getStorage().getLocalFile().getDomain());
+
     }
 
     @Override

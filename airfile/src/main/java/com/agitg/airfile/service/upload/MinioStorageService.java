@@ -29,6 +29,7 @@ public class MinioStorageService implements StorageService {
 
     @PostConstruct
     public void init() throws Exception {
+
         if (!properties.getStorage().getMinio().isEnable())
             return;
 
@@ -43,27 +44,30 @@ public class MinioStorageService implements StorageService {
     }
 
     @Override
-    public String save(String entryId, String fileName, InputStream inputStream, ChunkUpload chunk) throws IOException {
-        try {
+    public FileStorageInfo save(String entryId, String fileName, InputStream inputStream, ChunkUpload chunk)
+            throws IOException, Exception {
 
-            long total = InputStreamUtils.getInstance().getInputStreamSize(inputStream);
+        long total = InputStreamUtils.getInstance().getInputStreamSize(inputStream);
 
-            InputStream progressStream = new ProgressInputStream(
-                    inputStream, total, entryId, uploadProgressService);
+        InputStream progressStream = new ProgressInputStream(
+                inputStream, total, entryId, getStorageType(), uploadProgressService);
 
-            MinioClient client = getClient();
-            client.putObject(PutObjectArgs.builder()
-                    .bucket(properties.getStorage().getMinio().getBucket())
-                    .object(fileName)
-                    .stream(progressStream, total, -1)
-                    .contentType("application/octet-stream")
-                    .build());
+        MinioClient client = getClient();
+        client.putObject(PutObjectArgs.builder()
+                .bucket(properties.getStorage().getMinio().getBucket())
+                .object(fileName)
+                .stream(progressStream, total, -1)
+                .contentType("application/octet-stream")
+                .build());
 
-            return fileName;
+        // String objectUrl = String.format("%s/%s/%s",
+        // properties.getStorage().getMinio().getDomain(),
+        // properties.getStorage().getMinio().getBucket(), fileName);
 
-        } catch (Exception e) {
-            throw new IOException(e);
-        }
+        return new FileStorageInfo(properties.getStorage().getMinio().getBucket(),
+                fileName,
+                properties.getStorage().getMinio().getDomain());
+
     }
 
     @Override

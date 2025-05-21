@@ -53,11 +53,13 @@ airfile:
   storage:
     minio:
       enable: false
+      domain: http://mybucket.com
       url: http://localhost:9000
       accessKey: minioadmin
       secretKey: minioadmin
       bucket: resumes
-      
+
     localFile:
       enable: true
       path: "/Users/nandin.pao/Documents/agitg/source/fileflow/airfile/upload"
+      domain: http://mynginx.com
