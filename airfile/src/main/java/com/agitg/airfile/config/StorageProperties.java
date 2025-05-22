@@ -14,8 +14,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StorageProperties {
 
+    private Config config;
     private Schedule schedule;
     private Storage storage;
+
+    @Data
+    public static class Config {
+        private long fileThresholdBytes;
+    }
 
     @Data
     public static class Schedule {

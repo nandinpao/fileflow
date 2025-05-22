@@ -3,7 +3,6 @@ package com.agitg.airfile.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,9 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.agitg.airfile.batch.FileUploadEvent;
 import com.agitg.airfile.batch.FileUploadRepository;
+import com.agitg.airfile.config.StorageProperties;
 import com.agitg.airfile.controller.ChunkUpload;
 import com.agitg.airfile.controller.UploadBean;
-import com.agitg.airfile.controller.UploadProgressBean;
 import com.agitg.airfile.service.upload.FileStorageInfo;
 
 import lombok.extern.slf4j.Slf4j;
