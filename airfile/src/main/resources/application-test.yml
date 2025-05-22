@@ -49,6 +49,8 @@ airfile:
   schedule:
     fileType:
       interval: 30000
+  config:
+    file-threshold-bytes: 10485760  # 10MB
 
   storage:
     minio:
